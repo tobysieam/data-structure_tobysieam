@@ -141,7 +141,7 @@ bool ListEmpty(ListNode* phead)
 }
 
 
-//求双向链表的长度
+//9、求双向链表的长度
 //采用计数器遍历的方法，cur为phead的下一个，！=phead，count++
 int ListSize(ListNode* phead)
 {
@@ -154,4 +154,72 @@ int ListSize(ListNode* phead)
         cur = cur->next;
     }
     return count;
+}
+
+
+//10、双向链表的后向遍历（查找双向链表某个值）
+//也是采用遍历的方法，Data == x，返回cur的地址，迭代往后走
+ListNode* ListFind(ListNode* phead,LTdataType x)
+{
+    assert(phead);
+
+    ListNode* cur = phead->next;
+    while(cur != phead)
+    {
+        if(cur->Data == x)
+        {
+            return cur;
+        }
+        cur = cur->next;
+    }
+    return NULL;  //没有找到
+}
+
+
+//11、双向链表在pos之前插入
+void ListInsert(ListNode* pos,LTdataType x)
+{
+    assert(pos);
+
+    //记录pos的前一个
+    ListNode* prev = pos->prev;
+    ListNode* newnode = BuyListNode(x);
+
+    prev->next = newnode;
+    newnode->next = pos;
+    pos->prev = newnode;
+    newnode->prev = prev;
+}
+
+
+//12、双向链表删除pos位置
+//记录pos位置的前一个（prev），和pos位置的后一个（next），将prev节点与next节点链接，最后释放pos节点
+void ListErase(ListNode* pos)
+{
+    assert(pos);
+    //记录前一个与后一个
+    ListNode* prev = pos->prev;
+    ListNode* next = pos->next;
+
+    prev->next = next;
+    next->prev = prev;
+
+    free(pos);
+    pos = NULL;
+}
+
+
+//双向链表的销毁
+void ListDestroy(ListNode* phead)
+{
+    assert(phead);
+    //遍历销毁
+    ListNode* cur = phead->next;
+    while(cur != phead)
+    {
+        ListNode* next = cur->next;
+        free(cur);
+        cur = next;
+    }
+    free(phead);
 }
